@@ -193,11 +193,11 @@ struct AuthView: View {
             VStack(spacing: 20) {
                 HStack {
                     Spacer()
-                    Button(action: { showAuth = false }) {
-                        Image(systemName: "xmark")
-                            .font(.title2)
-                            .foregroundColor(.black)
-                    }
+//                    Button(action: { showAuth = false }) {
+//                        Image(systemName: "xmark")
+//                            .font(.title2)
+//                            .foregroundColor(.black)
+//                    }
                     .padding(.trailing)
                 }
                 
@@ -226,15 +226,27 @@ struct AuthView: View {
                     .textFieldStyle(.roundedBorder)
                     .padding(4)
                 
-                Button(action: {
-                    if viewModel.gotToken {
-                        
-                        NavigationView {
-                            ProfileView(viewModel: profileViewModel)
-                        }
-                    }
-                }) {
-                    Text("Войти")
+//                Button(action: {
+//                    if viewModel.gotToken {
+//                        
+//                        NavigationView {
+//                            ProfileView(viewModel: profileViewModel)
+//                        }
+//                    }
+//                    showAuth = false
+//                }) {
+//            Button(action: {
+//                showAuth = false })
+                            Button(action: {
+                                if viewModel.gotToken {
+            
+                                    NavigationView {
+                                        ProfileView(viewModel: profileViewModel)
+                                    }
+                                }
+                                showAuth = false
+                            })   {
+                        Text("Войти")
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding()
@@ -242,7 +254,7 @@ struct AuthView: View {
                         .background(Color.black)
                         .cornerRadius(12)
                 }
-                .disabled(login.isEmpty || password.isEmpty)
+//                .disabled(login.isEmpty || password.isEmpty)
                 .padding(.top, 20)
                 }
                 .padding()

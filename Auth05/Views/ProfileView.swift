@@ -178,9 +178,12 @@ struct ProfileView: View {
                                    
                                 }) {
                                     HStack {
-                                        
-                                        Text("Добавить работу")
-                                            .foregroundColor(.primary)
+                                        NavigationLink(
+                                            destination: AddJobView()
+                                        ){
+                                            Text("Добавить работу")
+                                                .foregroundColor(.primary)
+                                        }
                                     }
                                 }
                                 
