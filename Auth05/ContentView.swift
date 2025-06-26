@@ -189,79 +189,89 @@ struct AuthView: View {
     @State private var showProfile = false
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                HStack {
-                    Spacer()
-//                    Button(action: { showAuth = false }) {
-//                        Image(systemName: "xmark")
-//                            .font(.title2)
-//                            .foregroundColor(.black)
-//                    }
-                    .padding(.trailing)
+        GeometryReader { geometry in
+            ScrollView {
+                VStack {
+                    // Основной контент
+                    VStack(spacing: 20) {
+                        HStack {
+                            Spacer()
+                            // Кнопка закрытия (при необходимости)
+                            // Button(action: { showAuth = false }) {
+                            //     Image(systemName: "xmark")
+                            //         .font(.title2)
+                            //         .foregroundColor(.black)
+                            // }
+                            .padding(.trailing)
+                        }
+                        
+                        Image("a")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: .infinity)
+                        
+                        // Группа полей ввода
+                        Group {
+                            Text("Email")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            TextField("Введите email", text: $email)
+                                .textFieldStyle(.roundedBorder)
+                                .foregroundColor(.black)
+                            
+                            Text("Пароль")
+                                .font(.headline)
+                                .foregroundColor(.black)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            SecureField("Введите пароль", text: $password)
+                                .textFieldStyle(.roundedBorder)
+                        }
+                        .padding(.horizontal, 4)
+                        
+                        // Кнопка входа
+                        Button(action: loginAction) {
+                            Text("Войти")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.black)
+                                .cornerRadius(12)
+                        }
+                        .padding(.top, 20)
+                        
+                        // Ссылка на регистрацию
+                        HStack {
+                            Text("Нет аккаунта?")
+                                .foregroundColor(.black)
+                            
+                            Button(action: { /* переход на регистрацию */ }) {
+                                Text("Зарегистрироваться")
+                                    .foregroundColor(.black)
+                                    .underline()
+                            }
+                        }
+                        .padding(.top, 8)
+                    }
+                    .padding()
+                    .frame(maxWidth: 500)
+                    .frame(minHeight: geometry.size.height) // Важно: минимальная высота = высоте экрана
                 }
-                
-                Image("a")
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
-                
-                    
             }
-            Text("Почта")
-                .font(.headline)
-                .foregroundColor(.black)
-                .padding(4)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            TextField("user_6@email.com", text: $email)
-                    .textFieldStyle(.roundedBorder)
-                    .padding(4)
-                    .foregroundColor(.black)
-            Text("Пароль")
-                .foregroundColor(.black)
-                .font(.headline)
-                .padding(4)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                SecureField("testtest", text: $password)
-                    .textFieldStyle(.roundedBorder)
-                    .padding(4)
-                
-//                Button(action: {
-//                    if viewModel.gotToken {
-//                        
-//                        NavigationView {
-//                            ProfileView(viewModel: profileViewModel)
-//                        }
-//                    }
-//                    showAuth = false
-//                }) {
-//            Button(action: {
-//                showAuth = false })
-                            Button(action: {
-                                if viewModel.gotToken {
-            
-                                    NavigationView {
-                                        ProfileView(viewModel: profileViewModel)
-                                    }
-                                }
-                                showAuth = false
-                            })   {
-                        Text("Войти")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.black)
-                        .cornerRadius(12)
-                }
-//                .disabled(login.isEmpty || password.isEmpty)
-                .padding(.top, 20)
-                }
-                .padding()
-                .frame(maxWidth: 500)
-                .background(Color(red: 0.98, green: 0.95, blue: 0.92))
-            }
-          
+            .background(Color(red: 0.988, green: 0.984, blue: 0.984))
+            .edgesIgnoringSafeArea(.all) // Игнорируем безопасные области
+        }
+    }
+
+    private func loginAction() {
+        if viewModel.gotToken {
+            // Переход в профиль
+        }
+        showAuth = false
+    }
         }
    
 

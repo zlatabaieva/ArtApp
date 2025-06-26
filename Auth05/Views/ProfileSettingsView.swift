@@ -30,7 +30,7 @@ struct ProfileSettingsView: View {
                     
                 }
                 
-           
+                
                 NavigationLink(
                     destination: ProfileView(viewModel: viewModel),
                     isActive: $showProfileView,
@@ -38,7 +38,7 @@ struct ProfileSettingsView: View {
                 ).hidden()
                     .background(Color(red: 0.98, green: 0.95, blue: 0.92))
                 CustomTabBar(showProfileView: $showProfileView)
-                    
+                
             }
         }
         .navigationViewStyle(.stack)
@@ -106,48 +106,59 @@ struct ProfileSettingsView: View {
     private var actionsSection: some View {
         Section {
             Button(action: saveChangesLocally) {
-               
-                    Text("Сохранить изменения")
-                        .font(.headline)
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .frame(maxWidth: .infinity)
-                                        .background(Color.black)
-                                        .cornerRadius(12)
-                   
+                
+                Text("Сохранить изменения")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.black)
+                    .cornerRadius(12)
+                
                 
             }
             
             Button(action: resetToOriginal) {
-                  
+                
                 Text("Сбросить")
-                                .font(.headline)
-                                .foregroundColor(.black)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color.black, lineWidth: 1)
-                                )
-                   
-               }
+                    .font(.headline)
+                    .foregroundColor(.black)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.black, lineWidth: 1)
+                    )
+                
+            }
             
             Button(action: { showLogoutAlert = true }) {
                 Text("Выйти")
-                                .font(.headline)
-                                .foregroundColor(.red)
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color.red, lineWidth: 1)
-                                )
+                    .font(.headline)
+                    .foregroundColor(.black)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.black, lineWidth: 1)
+                    )
+            }
+            Button(action: { showLogoutAlert = true }) {
+                Text("Удалить")
+                    .font(.headline)
+                    .foregroundColor(.red)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.red, lineWidth: 1)
+                    )
             }
         }
         .listRowBackground(Color.clear)
         .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
     }
-    
+
 
     private func loadInitialData() {
         if viewModel.profile == nil {
@@ -339,7 +350,7 @@ struct AddMenu: View {
                 HStack {
                     Image(systemName: "doc.fill")
                         .foregroundColor(.blue)
-                    Text("Добавить работу")
+                    Text("Добавить")
                         .foregroundColor(.primary)
                 }
             }
@@ -353,7 +364,7 @@ struct AddMenu: View {
                 HStack {
                     Image(systemName: "folder.fill")
                         .foregroundColor(.blue)
-                    Text("Добавить коллекцию")
+                    Text("Добавить")
                         .foregroundColor(.primary)
                 }
             }

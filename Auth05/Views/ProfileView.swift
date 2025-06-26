@@ -117,7 +117,7 @@ struct ProfileView: View {
                         ProgressView()
                     }
                 }
-                .background(Color(red: 0.98, green: 0.95, blue: 0.92))
+                .background(Color(red: 0.988, green: 0.984, blue: 0.984))
                 .frame(maxWidth: .infinity)
             }
             .edgesIgnoringSafeArea(.horizontal)
@@ -143,7 +143,7 @@ struct ProfileView: View {
 
 
     struct CustomTabBar: View {
-        @State private var showAddMenu = false
+        @State private var showAdd = false
         @State private var showSettings = false
         @StateObject private var profileVM = ProfileViewModel()
         var body: some View {
@@ -158,62 +158,17 @@ struct ProfileView: View {
                     )
                     
                     
-                    ZStack {
+                    NavigationLink(
+                        destination: AddJobView(),
+                        isActive: $showAdd
+                    ) {
                         TabButton(
-                            icon: showAddMenu ? "xmark.circle.fill" : "plus.circle.fill",
+                            icon: "plus.circle.fill",
                             label: "Добавить",
                             isActive: false,
-                            action: {
-                                withAnimation(.spring()) {
-                                    showAddMenu.toggle()
-                                }
-                            }
+                            action: { showAdd = true }
                         )
-                        
-                       
-                        if showAddMenu {
-                            VStack(spacing: 12) {
-                                Button(action: {
-                                    showAddMenu = false
-                                   
-                                }) {
-                                    HStack {
-                                        NavigationLink(
-                                            destination: AddJobView()
-                                        ){
-                                            Text("Добавить работу")
-                                                .foregroundColor(.primary)
-                                        }
-                                    }
-                                }
-                                
-                                Divider()
-                                
-                                Button(action: {
-                                    showAddMenu = false
-                                 
-                                }) {
-                                    HStack {
-                                        
-                                        Text("Добавить коллекцию")
-                                            .foregroundColor(.primary)
-                                    }
-                                }
-                            }
-                            .padding(16)
-                            .background(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .fill(Color.white)
-                                    .shadow(radius: 5)
-                            )
-                            .frame(width: 220)
-                            .offset(y: -100)
-                            .transition(.move(edge: .bottom).combined(with: .opacity))
-                        }
                     }
-                    .frame(maxWidth: .infinity)
-                    
-                  
                     NavigationLink(
                         destination: ProfileSettingsView(),
                         isActive: $showSettings
@@ -262,95 +217,104 @@ struct ProfileView: View {
     
     private func profileHeader(profile: Profile) -> some View {
 
-        
-        return VStack(spacing: 0) {
-  
-            VStack(spacing: 8) {
-                AsyncImage(url: URL(string: profile.avatar.url)) { image in
-                    image
-                        .resizable()
-                        .scaledToFill()
-                } placeholder: {
-                    ProgressView()
-                }
-                .frame(width: 100, height: 100)
-                .clipShape(Circle())
-                .padding(.top, 60)
-
-                Text(profile.name)
-                    .font(.title)
-                    .bold()
-                
-                HStack(spacing: 20) {
-                    VStack {
-                        Text("ОЦЕНКИ")
-                            .font(.caption)
-                        Text("128")
-                            .font(.headline)
-                    }
-                    
-                    VStack {
-                        Text("РАБОТ")
-                            .font(.caption)
-                        Text("9")
-                            .font(.headline)
-                    }
-                    
-                    VStack {
-                        Text("КОЛЛЕКЦИЙ")
-                            .font(.caption)
-                        Text("2")
-                            .font(.headline)
-                    }
-                    
-                }
-                .padding(.bottom, 4)
-            }
-            .padding(.bottom, 16)
-            .frame(maxWidth: .infinity)
-            .background(Color(red: 0.839, green: 0.918, blue: 1.0))
-            .cornerRadius(12)
-            .ignoresSafeArea()
-            
-       
-            VStack(alignment: .leading, spacing: 12) {
-             
-                Button(action: {
-                    withAnimation {
-                        isDescriptionExpanded.toggle()
-                    }
-                }) {
-                    HStack {
-                        Text("Описание")
-                            .font(.headline)
-                        Image(systemName: isDescriptionExpanded ? "chevron.up" : "chevron.down")
-                    }
-                    .foregroundColor(.primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                
-                if isDescriptionExpanded {
-                    VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 0) {
+                // Отступ сверху для аватара
+                VStack(spacing: 20) {
+                    // Первый ряд: аватар, имя, стрелка
+                    HStack(spacing: 12) {
+                        AsyncImage(url: URL(string: profile.avatar.url)) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        .frame(width: 60, height: 60)
+                        .clipShape(Circle())
+                        .padding(.top, 6) // Отступ сверху для аватара
                         
-                       
-                        TagView(
-                                    tags: profile.authorTags,
-                                    showAll: $showAllTags,
-                                    maxVisibleTags: maxVisibleTags
-                                )
+                        Text(profile.name)
+                            .font(.title2)
+                            .bold()
+                            .lineLimit(1)
+                            .padding(.top, 6)
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                isDescriptionExpanded.toggle()
+                            }
+                        }) {
+                            Image(systemName: isDescriptionExpanded ? "chevron.up" : "chevron.down")
+                                .font(.headline)
+                                .foregroundColor(.primary)
+                                .contentShape(Rectangle()) // Увеличиваем область нажатия
+                        }
+                        .buttonStyle(PlainButtonStyle()) // Убираем стандартные стили кнопки
+                    }
+                    .padding(.top, 60)
+                    .padding(.horizontal, 16)
+                    
+                    // Второй ряд: показатели
+                    HStack(spacing: 12) {
+                        StatView(title: "Оценки", value: "128")
+                        StatView(title: "Работы", value: "9")
+                        StatView(title: "Коллекции", value: "2")
+                    }
+                    .padding(.bottom, 16)
+                    .padding(.horizontal, 16)// Отступ снизу перед описанием
+                }
+                
+                // Описание (появляется при нажатии)
+                if isDescriptionExpanded {
+                    Text("Об авторе")
+                    .font(.headline)
+                    .padding(.horizontal, 16)
+                    VStack(alignment: .leading, spacing: 12) {
                         Text(profile.bio)
                             .font(.body)
                             .multilineTextAlignment(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 8)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top, 16)
+                            .padding(.horizontal, 16)
                     }
+                    Text("Теги автора")
+                    .font(.headline)
+                    .padding(.horizontal, 16)
+                    .padding(.top, 16)
+                    TagView(
+                        tags: profile.authorTags,
+                        showAll: $showAllTags,
+                        maxVisibleTags: maxVisibleTags
+                    )
                     .transition(.opacity.combined(with: .move(edge: .top)))
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.top, 16)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 16) // Отступ снизу описания
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 16)
+    }
+    struct StatView: View {
+        let title: String
+        let value: String
+        
+        var body: some View {
+            VStack(alignment: .leading) {  // Выравнивание по правому краю
+                Text(title)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.secondary)
+                
+                Text(value)
+                    .font(.headline)
+                    .bold()
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 10)
+//            .padding(.horizontal, 8)
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
         }
     }
     private let maxVisibleTags = 6
